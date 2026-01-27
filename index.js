@@ -126,7 +126,9 @@ client.on("interactionCreate", async (interaction) => {
       );
 
       const member = await interaction.guild.members.fetch(interaction.user.id);
-      const role = await interaction.guild.roles.fetch(process.env.DISCORD_ROLE_ID);
+      const role = await interaction.guild.roles.fetch(
+        process.env.DISCORD_ROLE_ID,
+      );
 
       if (!role) {
         await interaction.editReply("Role not found in this server.");
@@ -142,9 +144,11 @@ client.on("interactionCreate", async (interaction) => {
         await member.roles.remove(role);
         await interaction.editReply(`Role **${role.name}** has been removed.`);
       } else if (hasProduct && hasRole) {
-        await interaction.editReply(`You already have the **${role.name}** role.`);
+        await interaction.editReply(
+          `You already have the **${role.name}** role.`,
+        );
       } else {
-        await interaction.editReply(`You don't have access to this product.`);
+        await interaction.editReply("You don't have access to this product.");
       }
     } catch (error) {
       console.error(error);
