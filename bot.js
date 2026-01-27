@@ -10,6 +10,10 @@ import "dotenv/config";
 
 const isDev = process.env.NODE_ENV === "development";
 
+// Do not change these value unless you know what you're doing
+const EPHEMERAL_FLAG = 64;
+const API_BASE_URL = "https://www.sourcexchange.net/api";
+
 const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
 });
@@ -28,8 +32,9 @@ const commands = [
 
 const rest = new REST({ version: "10" }).setToken(process.env.DISCORD_TOKEN);
 
+// Fetch data from SourceXchange API
 async function apiGet(path) {
-  const res = await fetch("https://www.sourcexchange.net/api" + path, {
+  const res = await fetch(API_BASE_URL + path, {
     headers: {
       Authorization: `Bearer ${process.env.API_TOKEN}`,
     },
@@ -55,6 +60,7 @@ async function apiGet(path) {
   return data;
 }
 
+// Get all product accesses for a Discord user
 async function getUserProductAccesses(discordId) {
   const userId = await apiGet(`/users/discord?id=${discordId}`);
   const productAccessesRaw = await apiGet(`/users/${userId}/accesses`);
@@ -80,7 +86,7 @@ client.once("clientReady", () => {
     status: "online",
     activities: [
       {
-        name: "Checking purchases 💳",
+        name: "Checking purchases",
         type: 3,
       },
     ],
@@ -90,8 +96,9 @@ client.once("clientReady", () => {
 client.on("interactionCreate", async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
 
+  // Handle /products command
   if (interaction.commandName === "products") {
-    await interaction.deferReply({ flags: 64 });
+    await interaction.deferReply({ flags: EPHEMERAL_FLAG });
 
     try {
       const productAccesses = await getUserProductAccesses(interaction.user.id);
@@ -102,10 +109,10 @@ client.on("interactionCreate", async (interaction) => {
       }
 
       const productDetails = await Promise.all(
-        productAccesses.map((res) => apiGet(`/products/${res.product_id}`)),
+        productAccesses.map((access) => apiGet(`/products/${access.product_id}`)),
       );
       const productNames = productDetails
-        .map((res) => res.data?.name || res.name)
+        .map((product) => product.data?.name || product.name)
         .join(", ");
 
       await interaction.editReply(`**Purchased products:** ${productNames}`);
@@ -115,8 +122,9 @@ client.on("interactionCreate", async (interaction) => {
         "Failed to fetch products. Make sure your Discord is linked.",
       );
     }
+  // Handle /sync command
   } else if (interaction.commandName === "sync") {
-    await interaction.deferReply({ flags: 64 });
+    await interaction.deferReply({ flags: EPHEMERAL_FLAG });
 
     try {
       const productAccesses = await getUserProductAccesses(interaction.user.id);
@@ -137,6 +145,7 @@ client.on("interactionCreate", async (interaction) => {
 
       const hasRole = member.roles.cache.has(role.id);
 
+      // Sync role based on product access
       if (hasProduct && !hasRole) {
         await member.roles.add(role);
         await interaction.editReply(`Role **${role.name}** has been added!`);
