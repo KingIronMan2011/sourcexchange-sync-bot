@@ -109,7 +109,9 @@ client.on("interactionCreate", async (interaction) => {
       }
 
       const productDetails = await Promise.all(
-        productAccesses.map((access) => apiGet(`/products/${access.product_id}`)),
+        productAccesses.map((access) =>
+          apiGet(`/products/${access.product_id}`),
+        ),
       );
       const productNames = productDetails
         .map((product) => product.data?.name || product.name)
@@ -122,7 +124,7 @@ client.on("interactionCreate", async (interaction) => {
         "Failed to fetch products. Make sure your Discord is linked.",
       );
     }
-  // Handle /sync command
+    // Handle /sync command
   } else if (interaction.commandName === "sync") {
     await interaction.deferReply({ flags: EPHEMERAL_FLAG });
 
