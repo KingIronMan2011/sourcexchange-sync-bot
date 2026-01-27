@@ -161,7 +161,7 @@ client.on("interactionCreate", async (interaction) => {
     } catch (error) {
       console.error(error);
       await interaction.editReply(
-        "Failed to sync roles. Make sure your Discord is linked.",
+        "Failed to sync roles. Make sure your Discord is linked.",  
       );
     }
   }
