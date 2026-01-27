@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node index.js",
     "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."
   },
