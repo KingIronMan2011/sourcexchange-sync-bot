@@ -9,10 +9,7 @@ import fetch from "node-fetch";
 import "dotenv/config";
 
 const isDev = process.env.NODE_ENV === "development";
-
-// Do not change these value unless you know what you're doing
 const EPHEMERAL_FLAG = 64;
-const API_BASE_URL = "https://www.sourcexchange.net/api";
 
 const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
@@ -34,7 +31,7 @@ const rest = new REST({ version: "10" }).setToken(process.env.DISCORD_TOKEN);
 
 // Fetch data from SourceXchange API
 async function apiGet(path) {
-  const res = await fetch(API_BASE_URL + path, {
+  const res = await fetch(process.env.API_BASE_URL + path, {
     headers: {
       Authorization: `Bearer ${process.env.API_TOKEN}`,
     },
