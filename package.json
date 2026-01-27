@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "node index.js",
+    "start": "node bot.js",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint .",
