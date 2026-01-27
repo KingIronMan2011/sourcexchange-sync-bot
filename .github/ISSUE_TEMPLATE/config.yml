@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Documentation & Wiki
+    url: https://github.com/KingIronMan2011/sourcexchange-sync-bot/wiki
+    about: Check the wiki for guides and documentation
+  - name: Sponsor this Project
+    url: https://github.com/sponsors/KingIronMan2011
+    about: Support the development of this project
+  - name: SourceXchange
+    url: https://www.sourcexchange.net
+    about: Visit SourceXchange for product and API documentation
