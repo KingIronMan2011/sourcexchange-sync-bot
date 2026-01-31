@@ -39,6 +39,5 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/sourcexchange-bot:latest
             ${{ secrets.DOCKER_USERNAME }}/sourcexchange-bot:${{ github.sha }}
-            ${{ secrets.DOCKER_USERNAME }}/sourcexchange-bot:${{ github.ref_name }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
