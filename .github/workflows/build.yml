@@ -44,9 +44,9 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm64
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/sourcexchange-bot:latest
             ${{ secrets.DOCKER_USERNAME }}/sourcexchange-bot:${{ github.sha }}
-            ghcr.io/kingironman2011/sourcexchange-sync-bot:latest
+            ${{ secrets.DOCKER_USERNAME }}/sourcexchange-bot:latest
             ghcr.io/kingironman2011/sourcexchange-sync-bot:${{ github.sha }}
+            ghcr.io/kingironman2011/sourcexchange-sync-bot:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
