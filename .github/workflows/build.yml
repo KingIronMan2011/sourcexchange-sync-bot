@@ -46,7 +46,7 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/sourcexchange-bot:latest
             ${{ secrets.DOCKER_USERNAME }}/sourcexchange-bot:${{ github.sha }}
-            ghcr.io/${{ github.repository_owner }}/sourcexchange-sync-bot:latest
-            ghcr.io/${{ github.repository_owner }}/sourcexchange-sync-bot:${{ github.sha }}
+            ghcr.io/kingironman2011/sourcexchange-sync-bot:latest
+            ghcr.io/kingironman2011/sourcexchange-sync-bot:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
