@@ -2,7 +2,7 @@ FROM node:24-alpine
 
 WORKDIR /
 
-COPY package*.json ./
+COPY package.json pnpm-*.yaml ./
 
 RUN npm i -g pnpm@latest
 
