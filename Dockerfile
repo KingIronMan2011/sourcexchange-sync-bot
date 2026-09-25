@@ -4,9 +4,9 @@ WORKDIR /
 
 COPY package.json pnpm-*.yaml ./
 
-RUN npm i -g pnpm@latest
+RUN npm i -g pnpm@11.25.0
 
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile --prod
 
 COPY . .
 
