@@ -70,23 +70,18 @@ async function apiGet<T = any>(path: string): Promise<T> {
         console.log("API GET ERROR", path, "status", status, "response:", data);
       }
       throw new Error(
-        `${status ?? "ERROR"} ${
-          typeof data === "string" ? data : JSON.stringify(data)
-        }`,
+        `${status ?? "ERROR"} ${typeof data === "string" ? data : JSON.stringify(data)}`,
+        { cause: err },
       );
     }
     throw err;
   }
 }
 
-async function getUserProductAccesses(
-  discordId: string,
-): Promise<ProductAccess[]> {
+async function getUserProductAccesses(discordId: string): Promise<ProductAccess[]> {
   const userId = await apiGet<string>(`/users/discord?id=${discordId}`);
   const productAccessesRaw = await apiGet<any>(`/users/${userId}/accesses`);
-  return Array.isArray(productAccessesRaw)
-    ? productAccessesRaw
-    : productAccessesRaw.data || [];
+  return Array.isArray(productAccessesRaw) ? productAccessesRaw : productAccessesRaw.data || [];
 }
 
 async function deployCommands(): Promise<void> {
@@ -131,9 +126,7 @@ client.on("interactionCreate", async (interaction: Interaction) => {
       }
 
       const productDetails = await Promise.all(
-        productAccesses.map((access) =>
-          apiGet<ProductResponse>(`/products/${access.product_id}`),
-        ),
+        productAccesses.map((access) => apiGet<ProductResponse>(`/products/${access.product_id}`)),
       );
       const productNames = productDetails
         .map((product) => product.data?.name || product.name || "Unknown")
@@ -142,9 +135,7 @@ client.on("interactionCreate", async (interaction: Interaction) => {
       await cmd.editReply(`**Purchased products:** ${productNames}`);
     } catch (error) {
       console.error(error);
-      await cmd.editReply(
-        "Failed to fetch products. Make sure your Discord is linked.",
-      );
+      await cmd.editReply("Failed to fetch products. Make sure your Discord is linked.");
     }
   } else if (cmd.commandName === "sync") {
     await cmd.deferReply({ flags: EPHEMERAL_FLAG });
@@ -152,9 +143,7 @@ client.on("interactionCreate", async (interaction: Interaction) => {
     try {
       const productAccesses = await getUserProductAccesses(cmd.user.id);
       const targetProductId = parseInt(getEnv("PRODUCT_ID"), 10);
-      const hasProduct = productAccesses.some(
-        (access) => access.product_id === targetProductId,
-      );
+      const hasProduct = productAccesses.some((access) => access.product_id === targetProductId);
 
       if (!cmd.guild) {
         await cmd.editReply("This command must be used in a server.");
@@ -184,9 +173,7 @@ client.on("interactionCreate", async (interaction: Interaction) => {
       }
     } catch (error) {
       console.error(error);
-      await cmd.editReply(
-        "Failed to sync roles. Make sure your Discord is linked.",
-      );
+      await cmd.editReply("Failed to sync roles. Make sure your Discord is linked.");
     }
   }
 });

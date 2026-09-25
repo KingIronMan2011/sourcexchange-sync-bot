@@ -4,10 +4,10 @@ WORKDIR /
 
 COPY package*.json ./
 
-RUN npm i -g npm@latest
+RUN npm i -g pnpm@latest
 
-RUN npm ci --only=production
+RUN pnpm install --frozen-lockfile
 
 COPY . .
 
-CMD ["npm", "start"]
+CMD ["pnpm", "start"]
